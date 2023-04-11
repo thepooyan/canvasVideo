@@ -1,0 +1,22 @@
+body {
+    font-family: IRANSansX;
+    direction: rtl;
+}
+
+* {
+    box-sizing: border-box;
+
+}
+video {
+    max-width: 100%;
+}
+
+@import 'canvasPlayer';
+@import 'Fonts';
+
+.canvasPlayer2 {
+    width: 53em;
+    direction: rtl;
+    margin-top: 3.4em;
+    margin-left: 5em;
+}

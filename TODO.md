@@ -1,0 +1,1 @@
+- progress bar jump is not exactly at mouse position

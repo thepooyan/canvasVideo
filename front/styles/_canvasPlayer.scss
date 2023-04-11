@@ -1,0 +1,245 @@
+.canvasPlayer {
+    --color1: rgb(224, 224, 224);
+    --color2: white;
+    --background: black;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: max-content;
+    max-width: 100%;
+    margin-bottom: 1em;
+    -webkit-tap-highlight-color: transparent;
+
+    [data-icon] {
+
+        &::before {
+            content: attr(data-icon);
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: 1.5em;
+        }
+
+        &.active::before {
+            content: attr(data-alt-icon);
+        }
+    }
+
+    canvas {
+        background-color: var(--background);
+        display: block;
+        cursor: pointer;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .controlBar {
+        --height: 4.3em;
+        height: var(--height);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1em;
+        margin: auto;
+        padding: 0.7em;
+        padding-top: 1.7em;
+        transition: .2s opacity;
+        opacity: 0;
+
+        button {
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--color1);
+            transition: .2s color;
+            font-size: .66em;
+
+
+            &.fullsc {
+                position: absolute;
+                right: 2em;
+                transition: 0.2s cubic-bezier(.39, .58, .57, 1) transform;
+
+                &:hover {
+                    transform: scale(1.3);
+                }
+            }
+
+            &.volume {
+                display: flex;
+                align-items: center;
+                flex-direction: row-reverse;
+                gap: 0.7em;
+                width: 2.5em;
+                overflow: hidden;
+                transition: .2s width;
+
+                .volumeBar {
+                    --progress: 50;
+                    --color2: red;
+                    width: 6em;
+                    height: 2px;
+                    background: linear-gradient(to right, var(--color2) calc(1% * var(--progress)), var(--color1) calc(1% * var(--progress)));
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+
+                    &::before {
+                        content: "";
+                        padding: 4px;
+                        display: block;
+                        background-color: var(--color2);
+                        border-radius: 50%;
+                        position: absolute;
+                        left: calc(calc(1% * var(--progress)) - 1px);
+                    }
+                }
+
+                &:hover {
+                    width: 10em;
+                }
+
+                &::before {
+                    width: 1.4em;
+                    flex-shrink: 0;
+                }
+            }
+
+            &.setting {
+                transition: .2s;
+
+                &:hover {
+                    transform: rotate(45deg);
+                }
+            }
+
+            &:hover {
+                color: var(--color2);
+            }
+        }
+
+        .progressBar {
+            --progress: 0;
+            --color2: red;
+            width: 97%;
+            position: absolute;
+            top: .2em;
+            padding: .6em 0;
+            cursor: pointer;
+
+            &::after {
+                //the line
+                content: '';
+                display: block;
+                width: 100%;
+                background: linear-gradient(to right, var(--color2) calc(1% * var(--progress)), var(--color1) calc(1% * var(--progress)));
+                height: 2px;
+            }
+
+            &::before {
+                //the ball
+                content: '';
+                display: block;
+                background-color: var(--color2);
+                border-radius: 50%;
+                position: absolute;
+                left: calc(calc(1% * var(--progress)) - .35em);
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                transition: transform .2s;
+                width: 0.55em;
+                height: 0.55em;
+                transform: scale(.1);
+            }
+
+            &:hover::before {
+                transform: scale(1);
+            }
+        }
+
+        &::after {
+            content: attr(data-spenttime) " \\ " attr(data-wholetime);
+            color: var(--color1);
+            font-size: .8em;
+            order: -1;
+        }
+    }
+
+    .notif {
+        position: absolute;
+        padding: 2.6em;
+        width: 0;
+        height: 0;
+        background: rgb(0 0 0 / 45%);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        border-radius: 50%;
+        opacity: 0;
+        animation: flash .35s;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        color: var(--color1);
+
+        &.show {
+            display: flex;
+        }
+
+        @keyframes flash {
+            0% {
+                transform: scale(.8);
+                opacity: .4;
+            }
+
+            50% {
+                opacity: .8;
+            }
+
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+    }
+
+    &.fullscreen {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        z-index: 10000;
+        top: 0;
+        left: 0;
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    &::before {
+        content: '';
+        transition: .2s opacity;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 60%;
+        background: linear-gradient(to top, #000000ab, #0000);
+        opacity: 0;
+    }
+
+    &.hover {
+
+        &::before,
+        .controlBar {
+            opacity: 100;
+        }
+    }
+}

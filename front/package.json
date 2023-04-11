@@ -1,0 +1,21 @@
+{
+  "name": "front",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "host": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.1.0"
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "eixes": "^1.0.2",
+    "jquery": "^3.6.4",
+    "sass": "^1.59.2"
+  }
+}
