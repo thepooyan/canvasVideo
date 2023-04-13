@@ -16,6 +16,7 @@ class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
   hoverTimeout;
+  disapearTime = 500;
 
   constructor(id) {
     this.id = id;
@@ -62,7 +63,7 @@ class CanvasVideo {
       this.hoverTimeout = setTimeout(() => {
         if (!this.playButton.classList.contains('active')) return
         this.container.classList.remove('hover');
-      }, 500);
+      }, this.disapearTime);
     }
     this.container.onmouseout = () => {
       if (!this.playButton.classList.contains('active')) return
@@ -78,7 +79,7 @@ class CanvasVideo {
       if (res) {
         setTimeout(() => {
           this.container.classList.remove('hover');
-        }, 500);
+        }, this.disapearTime);
         this.#showNotif({ icon: this.playButton.dataset.icon })
       } else {
         this.#showNotif({ icon: this.playButton.dataset.altIcon })
