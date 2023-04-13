@@ -15,6 +15,7 @@ function removeDecimal(number, howMuch) {
 class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
+  hoverTimeout;
 
   constructor(id) {
     this.id = id;
@@ -53,13 +54,12 @@ class CanvasVideo {
     this.container.appendChild(this.canvasClone);
     this.container.classList.add('hover');
 
-    let hoverTimeout;
     this.container.onmousemove = () => {
       if (!this.playButton.classList.contains('active')) return
-      clearInterval(hoverTimeout);
+      clearInterval(this.hoverTimeout);
       this.container.classList.add('hover');
 
-      hoverTimeout = setTimeout(() => {
+      this.hoverTimeout = setTimeout(() => {
         if (!this.playButton.classList.contains('active')) return
         this.container.classList.remove('hover');
       }, 500);
