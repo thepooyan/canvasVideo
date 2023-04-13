@@ -9,7 +9,7 @@ function createEle(className) {
 }
 
 function removeDecimal(number, howMuch) {
-  return Math.trunc(number*Math.pow(10, howMuch))/Math.pow(10, howMuch);
+  return Math.trunc(number * Math.pow(10, howMuch)) / Math.pow(10, howMuch);
 }
 
 class CanvasVideo {
@@ -89,16 +89,16 @@ class CanvasVideo {
       this.progressBar.style.setProperty('--progress', progress);
     }
     this.progressBar.onmousedown = e => {
-      
+
       window.addEventListener('mousemove', dragProgressLine);
-      window.addEventListener('mouseup', ()=>{
+      window.addEventListener('mouseup', () => {
         window.removeEventListener('mousemove', dragProgressLine);
       })
     }
     let that = this;
     function dragProgressLine(e) {
       let progress = dragLine(e, that.progressBar)
-      
+
       that.jumpVideo({ timestamp: (progress * that.wholeTime.time) / 100 });
       that.progressBar.style.setProperty('--progress', progress);
     }
@@ -106,7 +106,7 @@ class CanvasVideo {
       let rect = ele.getBoundingClientRect();
       let left = rect.left;
       let width = ele.clientWidth;
-      let amount =  event.clientX - left;
+      let amount = event.clientX - left;
       if (amount < 0) amount = 0;
       if (amount > width) amount = width;
       let percent = removeDecimal(amount / width * 100, 2);
@@ -141,9 +141,9 @@ class CanvasVideo {
       this.toggleMute();
     }
     this.volumeBar.onmousedown = e => {
-      
+
       window.addEventListener('mousemove', volumeDrag);
-      window.addEventListener('mouseup', ()=>{
+      window.addEventListener('mouseup', () => {
         window.removeEventListener('mousemove', volumeDrag);
       })
     }
@@ -162,14 +162,19 @@ class CanvasVideo {
     //setting menu
     this.settingMenu = document.createElement('div');
     let speeds = [.5, .75, 1, 1.25, 1.5, 1.75, 2];
-    speeds.forEach(i => {
+    speeds = speeds.map(i => {
       let li = document.createElement('li');
       li.innerText = i;
+      if (i===1)
+      li.classList.add('active')
       li.onclick = () => {
         this.changeSpeed(i);
-        this.#showNotif({ text: i })
+        this.#showNotif({ text: i });
+        speeds.forEach(item=>item.classList.remove('active'));
+        li.classList.add('active');
       }
       this.settingMenu.appendChild(li);
+      return li
     })
     this.settingButton.appendChild(this.settingMenu);
 
@@ -196,7 +201,7 @@ class CanvasVideo {
       button.className = className;
     if (altIcon)
       button.dataset.altIcon = altIcon;
-
+    if (typeof onclick === 'function')
     button.onclick = () => { onclick(button) };
 
     this.controlBar.appendChild(button);
@@ -276,9 +281,8 @@ class CanvasVideo {
   }
   changeVolume = (amount1_100) => {
     this.video.volume = amount1_100 / 100;
-    if (this.video.muted) {
+    if (this.video.muted)
       this.toggleMute()
-    }
   }
   toggleMute = () => {
     this.volumeButton.classList.toggle('active')
