@@ -101,6 +101,9 @@
                         width: 100%;
                         background: linear-gradient(to right, var(--color2) calc(1% * var(--progress)), var(--color1) calc(1% * var(--progress)));
                     }
+                    &.muted {
+                        --progress: 0 !important;
+                    }
                 }
 
                 &:hover {

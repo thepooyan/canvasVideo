@@ -276,9 +276,13 @@ class CanvasVideo {
   }
   changeVolume = (amount1_100) => {
     this.video.volume = amount1_100 / 100;
+    if (this.video.muted) {
+      this.toggleMute()
+    }
   }
   toggleMute = () => {
     this.volumeButton.classList.toggle('active')
+    this.volumeBar.classList.toggle('muted')
     this.video.muted = !this.video.muted;
   }
   changeSpeed(amount) {
