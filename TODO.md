@@ -1,1 +1,2 @@
-- progress bar jump is not exactly at mouse position
+- line drag on above the control bar cause the video to pause
+- line drag doesn't work on the dot itself
