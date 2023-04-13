@@ -13,7 +13,6 @@ class CanvasVideo {
   spentTime = new TimeCapsule(0);
 
   constructor(id) {
-    window.me = this;//for test
     this.id = id;
     this.canvas = dc.id(id);
     this.canvasClone = this.canvas.cloneNode();
@@ -92,11 +91,11 @@ class CanvasVideo {
     this.settingButton = this.#createButton('', null, { className: "setting" });
     this.volumeButton = this.#createButton('', this.toggleMute, { altIcon: '', className: 'volume' });
     this.#createButton('', () => {
-      this.#showNotif("");
+      this.#showNotif({icon: ""});
       this.jumpVideo({ amount: 15 });
     });
     this.#createButton('', () => {
-      this.#showNotif("");
+      this.#showNotif({icon: ""});
       this.jumpVideo({ amount: -15 })
     });
     this.playButton = this.#createButton('', ()=>{this.toggleVideoPlay()}, { altIcon: '' });
@@ -111,6 +110,16 @@ class CanvasVideo {
 
     //setting menu
     this.settingMenu = document.createElement('div');
+    let speeds = [.5, .75, 1, 1.25, 1.5, 1.75, 2];
+    speeds.forEach(i=>{
+      let li = document.createElement('li');
+      li.innerText = i;
+      li.onclick = () => {
+        this.changeSpeed(i);
+        this.#showNotif({text: i})
+      }
+      this.settingMenu.appendChild(li);
+    })
     this.settingButton.appendChild(this.settingMenu);
 
     this.canvas.replaceWith(this.container);
@@ -144,8 +153,15 @@ class CanvasVideo {
   }
 
   //control methods
-  #showNotif(icon) {
-    this.notif.dataset.icon = icon;
+  #showNotif({icon, text} = {}) {
+    if (icon) {
+      this.notif.dataset.icon = icon;
+      this.notif.innerText = '';
+    }
+    if (text) {
+      this.notif.dataset.icon = '';
+      this.notif.innerText = text;
+    }
     this.notif.classList.add('show');
     this.notif.addEventListener('animationend', () => {
       this.notif.classList.remove('show');
@@ -154,11 +170,11 @@ class CanvasVideo {
   toggleVideoPlay() {
     let isVideoPlaying = this.playButton.classList.toggle('active');
     if (!isVideoPlaying) {
-      this.#showNotif(this.playButton.dataset.altIcon)
+      this.#showNotif({icon: this.playButton.dataset.altIcon})
       this.video.pause();
       this.animationAuthorization = false;
     } else {
-      this.#showNotif(this.playButton.dataset.icon)
+      this.#showNotif({icon: this.playButton.dataset.icon})
       this.video.play();
       this.animationAuthorization = true;
       this.#paintCanvas();
