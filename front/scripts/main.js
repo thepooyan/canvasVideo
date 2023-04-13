@@ -132,7 +132,6 @@ class CanvasVideo {
     this.volumeBar = createEle('volumeBar')
     this.volumeBar.onclick = e => {
       let progress = (e.layerX / this.volumeBar.clientWidth) * 100;
-      console.log(progress);
       this.changeVolume(progress)
       this.volumeBar.style.setProperty('--progress', progress);
     }
@@ -140,6 +139,20 @@ class CanvasVideo {
     this.volumeButton.onclick = e => {
       if (this.volumeBar.contains(e.target)) return
       this.toggleMute();
+    }
+    this.volumeBar.onmousedown = e => {
+      
+      window.addEventListener('mousemove', volumeDrag);
+      window.addEventListener('mouseup', ()=>{
+        window.removeEventListener('mousemove', volumeDrag);
+      })
+    }
+    function volumeDrag(e) {
+      let progress = dragLine(e, that.volumeBar);
+      if (progress) {
+        that.changeVolume(progress)
+        that.volumeBar.style.setProperty('--progress', progress);
+      }
     }
 
     //notif part
