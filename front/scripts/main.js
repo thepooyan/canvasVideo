@@ -89,7 +89,7 @@ class CanvasVideo {
     //create buttons
     this.fullscButton = this.#createButton('', this.toggleFullscreen, { className: "fullsc", altIcon: '' });
     this.settingButton = this.#createButton('', null, { className: "setting" });
-    this.volumeButton = this.#createButton('', this.toggleMute, { altIcon: '', className: 'volume' });
+    this.volumeButton = this.#createButton('', null, { altIcon: '', className: 'volume' });
     this.#createButton('', () => {
       this.#showNotif({icon: ""});
       this.jumpVideo({ amount: 15 });
@@ -100,9 +100,19 @@ class CanvasVideo {
     });
     this.playButton = this.#createButton('', ()=>{this.toggleVideoPlay()}, { altIcon: '' });
 
-    //volume bar
+    //volume 
     this.volumeBar = createEle('volumeBar')
+    this.volumeBar.onclick = e => {
+      let progress = (e.layerX / this.volumeBar.clientWidth) * 100;
+      console.log(progress);
+      this.changeVolume(progress)
+      this.volumeBar.style.setProperty('--progress', progress);
+    }
     this.volumeButton.appendChild(this.volumeBar);
+    this.volumeButton.onclick = e => {
+      if (this.volumeBar.contains(e.target)) return
+      this.toggleMute();
+    }
 
     //notif part
     this.notif = createEle('notif');
