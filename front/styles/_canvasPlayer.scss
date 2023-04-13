@@ -191,6 +191,7 @@
 
             &::before {
                 //the ball
+                pointer-events: none;
                 content: '';
                 display: block;
                 background-color: var(--color2);
