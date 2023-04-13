@@ -62,7 +62,7 @@ class CanvasVideo {
       hoverTimeout = setTimeout(() => {
         if (!this.playButton.classList.contains('active')) return
         this.container.classList.remove('hover');
-      }, 2500);
+      }, 500);
     }
     this.container.onmouseout = () => {
       if (!this.playButton.classList.contains('active')) return
@@ -75,10 +75,15 @@ class CanvasVideo {
     this.container.onclick = e => {
       if (this.controlBar.contains(e.target)) return;
       let res = this.toggleVideoPlay();
-      if (res)
-      this.#showNotif({ icon: this.playButton.dataset.icon })
-      else
-      this.#showNotif({ icon: this.playButton.dataset.altIcon })
+      if (res) {
+        setTimeout(() => {
+          this.container.classList.remove('hover');
+        }, 500);
+        this.#showNotif({ icon: this.playButton.dataset.icon })
+      } else {
+        this.#showNotif({ icon: this.playButton.dataset.altIcon })
+        this.container.classList.add('hover')
+      }
     }
 
     //create control bar
@@ -101,7 +106,7 @@ class CanvasVideo {
       window.addEventListener('mouseup', () => {
         window.removeEventListener('mousemove', dragProgressLine);
         this.toggleVideoPlay();
-      }, {once: true})
+      }, { once: true })
     }
     let that = this;
     let lineTouched;
@@ -144,13 +149,13 @@ class CanvasVideo {
       this.#showNotif({ icon: "" });
       this.jumpVideo({ amount: -15 })
     });
-    this.playButton = this.#createButton('', () => { 
+    this.playButton = this.#createButton('', () => {
       let res = this.toggleVideoPlay()
       if (res)
         this.#showNotif({ icon: this.playButton.dataset.icon })
       else
         this.#showNotif({ icon: this.playButton.dataset.altIcon })
-     }, { altIcon: '' });
+    }, { altIcon: '' });
 
     //volume 
     this.volumeBar = createEle('volumeBar')
@@ -189,12 +194,12 @@ class CanvasVideo {
     speeds = speeds.map(i => {
       let li = document.createElement('li');
       li.innerText = i;
-      if (i===1)
-      li.classList.add('active')
+      if (i === 1)
+        li.classList.add('active')
       li.onclick = () => {
         this.changeSpeed(i);
         this.#showNotif({ text: i });
-        speeds.forEach(item=>item.classList.remove('active'));
+        speeds.forEach(item => item.classList.remove('active'));
         li.classList.add('active');
       }
       this.settingMenu.appendChild(li);
@@ -226,7 +231,7 @@ class CanvasVideo {
     if (altIcon)
       button.dataset.altIcon = altIcon;
     if (typeof onclick === 'function')
-    button.onclick = () => { onclick(button) };
+      button.onclick = () => { onclick(button) };
 
     this.controlBar.appendChild(button);
     return button
