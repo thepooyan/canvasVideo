@@ -74,7 +74,11 @@ class CanvasVideo {
     }
     this.container.onclick = e => {
       if (this.controlBar.contains(e.target)) return;
-      this.toggleVideoPlay();
+      let res = this.toggleVideoPlay();
+      if (res)
+      this.#showNotif({ icon: this.playButton.dataset.icon })
+      else
+      this.#showNotif({ icon: this.playButton.dataset.altIcon })
     }
 
     //create control bar
@@ -87,20 +91,34 @@ class CanvasVideo {
       let progress = (e.layerX / this.progressBar.clientWidth) * 100;
       this.jumpVideo({ timestamp: (progress * this.wholeTime.time) / 100 });
       this.progressBar.style.setProperty('--progress', progress);
+      if (this.video.paused) {
+        this.toggleVideoPlay()
+      }
     }
     this.progressBar.onmousedown = e => {
 
       window.addEventListener('mousemove', dragProgressLine);
       window.addEventListener('mouseup', () => {
         window.removeEventListener('mousemove', dragProgressLine);
-      })
+        this.toggleVideoPlay();
+      }, {once: true})
     }
     let that = this;
+    let lineTouched;
     function dragProgressLine(e) {
+      clearTimeout(lineTouched);
+      if (!that.video.paused) {
+        that.toggleVideoPlay()
+      }
       let progress = dragLine(e, that.progressBar)
-
-      that.jumpVideo({ timestamp: (progress * that.wholeTime.time) / 100 });
+      let lastProgress;
       that.progressBar.style.setProperty('--progress', progress);
+
+      lineTouched = setTimeout(() => {
+        if (progress === lastProgress) return
+        that.jumpVideo({ timestamp: (progress * that.wholeTime.time) / 100 });
+        lastProgress = progress;
+      }, 100);
     }
     function dragLine(event, ele) {
       let rect = ele.getBoundingClientRect();
@@ -126,13 +144,19 @@ class CanvasVideo {
       this.#showNotif({ icon: "" });
       this.jumpVideo({ amount: -15 })
     });
-    this.playButton = this.#createButton('', () => { this.toggleVideoPlay() }, { altIcon: '' });
+    this.playButton = this.#createButton('', () => { 
+      let res = this.toggleVideoPlay()
+      if (res)
+        this.#showNotif({ icon: this.playButton.dataset.icon })
+      else
+        this.#showNotif({ icon: this.playButton.dataset.altIcon })
+     }, { altIcon: '' });
 
     //volume 
     this.volumeBar = createEle('volumeBar')
     this.volumeBar.onclick = e => {
       let progress = (e.layerX / this.volumeBar.clientWidth) * 100;
-      this.changeVolume(progress)
+      this.changeVolume(progress);
       this.volumeBar.style.setProperty('--progress', progress);
     }
     this.volumeButton.appendChild(this.volumeBar);
@@ -226,14 +250,14 @@ class CanvasVideo {
   toggleVideoPlay() {
     let isVideoPlaying = this.playButton.classList.toggle('active');
     if (!isVideoPlaying) {
-      this.#showNotif({ icon: this.playButton.dataset.altIcon })
       this.video.pause();
       this.animationAuthorization = false;
+      return false
     } else {
-      this.#showNotif({ icon: this.playButton.dataset.icon })
       this.video.play();
       this.animationAuthorization = true;
       this.#paintCanvas();
+      return true
     }
   }
   finished() {
