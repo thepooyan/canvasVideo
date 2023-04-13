@@ -8,6 +8,10 @@ function createEle(className) {
   return ele
 }
 
+function removeDecimal(number, howMuch) {
+  return Math.trunc(number*Math.pow(10, howMuch))/Math.pow(10, howMuch);
+}
+
 class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
@@ -19,7 +23,7 @@ class CanvasVideo {
 
     this.video = document.createElement('video');
     this.video.style.display = "none";
-    this.video.addEventListener('ended', ()=>{this.finished()});
+    this.video.addEventListener('ended', () => { this.finished() });
     document.body.appendChild(this.video);
 
     $.ajax({
@@ -84,6 +88,25 @@ class CanvasVideo {
       this.jumpVideo({ timestamp: (progress * this.wholeTime.time) / 100 });
       this.progressBar.style.setProperty('--progress', progress);
     }
+    this.progressBar.onmousedown = e => {
+      
+      window.addEventListener('mousemove', dragLine);
+      window.addEventListener('mouseup', ()=>{
+        window.removeEventListener('mousemove', dragLine);
+      })
+    }
+    let that = this;
+    function dragLine(e) {
+      let rect = that.progressBar.getBoundingClientRect();
+      let left = rect.left;
+      let width = that.progressBar.clientWidth;
+      let amount =  e.clientX - left;
+      if (amount < 0) amount = 0;
+      if (amount > width) amount = width;
+      let progress = removeDecimal(amount / width * 100, 2);
+      that.jumpVideo({ timestamp: (progress * that.wholeTime.time) / 100 });
+      that.progressBar.style.setProperty('--progress', progress);
+    }
     this.controlBar.appendChild(this.progressBar);
 
     //create buttons
@@ -91,14 +114,14 @@ class CanvasVideo {
     this.settingButton = this.#createButton('', null, { className: "setting" });
     this.volumeButton = this.#createButton('', null, { altIcon: '', className: 'volume' });
     this.#createButton('', () => {
-      this.#showNotif({icon: ""});
+      this.#showNotif({ icon: "" });
       this.jumpVideo({ amount: 15 });
     });
     this.#createButton('', () => {
-      this.#showNotif({icon: ""});
+      this.#showNotif({ icon: "" });
       this.jumpVideo({ amount: -15 })
     });
-    this.playButton = this.#createButton('', ()=>{this.toggleVideoPlay()}, { altIcon: '' });
+    this.playButton = this.#createButton('', () => { this.toggleVideoPlay() }, { altIcon: '' });
 
     //volume 
     this.volumeBar = createEle('volumeBar')
@@ -121,12 +144,12 @@ class CanvasVideo {
     //setting menu
     this.settingMenu = document.createElement('div');
     let speeds = [.5, .75, 1, 1.25, 1.5, 1.75, 2];
-    speeds.forEach(i=>{
+    speeds.forEach(i => {
       let li = document.createElement('li');
       li.innerText = i;
       li.onclick = () => {
         this.changeSpeed(i);
-        this.#showNotif({text: i})
+        this.#showNotif({ text: i })
       }
       this.settingMenu.appendChild(li);
     })
@@ -163,7 +186,7 @@ class CanvasVideo {
   }
 
   //control methods
-  #showNotif({icon, text} = {}) {
+  #showNotif({ icon, text } = {}) {
     if (icon) {
       this.notif.dataset.icon = icon;
       this.notif.innerText = '';
@@ -180,11 +203,11 @@ class CanvasVideo {
   toggleVideoPlay() {
     let isVideoPlaying = this.playButton.classList.toggle('active');
     if (!isVideoPlaying) {
-      this.#showNotif({icon: this.playButton.dataset.altIcon})
+      this.#showNotif({ icon: this.playButton.dataset.altIcon })
       this.video.pause();
       this.animationAuthorization = false;
     } else {
-      this.#showNotif({icon: this.playButton.dataset.icon})
+      this.#showNotif({ icon: this.playButton.dataset.icon })
       this.video.play();
       this.animationAuthorization = true;
       this.#paintCanvas();
