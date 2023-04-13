@@ -90,22 +90,27 @@ class CanvasVideo {
     }
     this.progressBar.onmousedown = e => {
       
-      window.addEventListener('mousemove', dragLine);
+      window.addEventListener('mousemove', dragProgressLine);
       window.addEventListener('mouseup', ()=>{
-        window.removeEventListener('mousemove', dragLine);
+        window.removeEventListener('mousemove', dragProgressLine);
       })
     }
     let that = this;
-    function dragLine(e) {
-      let rect = that.progressBar.getBoundingClientRect();
-      let left = rect.left;
-      let width = that.progressBar.clientWidth;
-      let amount =  e.clientX - left;
-      if (amount < 0) amount = 0;
-      if (amount > width) amount = width;
-      let progress = removeDecimal(amount / width * 100, 2);
+    function dragProgressLine(e) {
+      let progress = dragLine(e, that.progressBar)
+      
       that.jumpVideo({ timestamp: (progress * that.wholeTime.time) / 100 });
       that.progressBar.style.setProperty('--progress', progress);
+    }
+    function dragLine(event, ele) {
+      let rect = ele.getBoundingClientRect();
+      let left = rect.left;
+      let width = ele.clientWidth;
+      let amount =  event.clientX - left;
+      if (amount < 0) amount = 0;
+      if (amount > width) amount = width;
+      let percent = removeDecimal(amount / width * 100, 2);
+      return percent
     }
     this.controlBar.appendChild(this.progressBar);
 
