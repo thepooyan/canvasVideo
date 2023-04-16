@@ -18,9 +18,12 @@ class CanvasVideo {
   disapearTime = 1500;
   isDragging = false;
   isPlaying = false;
+  // isMobile = /Android|iPhone/i.test(navigator.userAgent);
+  isMobile = true;
   hover = {
     amount: 2000,
     timeout: null,
+    isShow: false,
     countdown: () => {
       clearTimeout(this.hover.timeout);
       this.hover.timeout = setTimeout(() => {
@@ -29,10 +32,12 @@ class CanvasVideo {
     },
     show: () => {
       this.container.classList.add('hover');
+      this.hover.isShow = true;
     },
     hide: () => {
       if (!this.isPlaying) return
       this.container.classList.remove('hover');
+      this.hover.isShow = false;
     }
   };
 
@@ -96,6 +101,20 @@ class CanvasVideo {
         this.hover.show();
         this.#showNotif({ icon: this.playButton.dataset.altIcon })
       }
+    }
+    if (this.isMobile) {
+      this.container.onclick = e => {
+        this.hover.countdown();
+        if (this.controlBar.contains(e.target)) return
+        
+        if (this.hover.isShow) {
+          this.hover.hide();
+        } else {
+          this.hover.show();
+        }
+      }
+      this.container.onmousemove = null;
+      this.container.onmouseout = null;
     }
 
     //create control bar
