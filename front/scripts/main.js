@@ -84,7 +84,7 @@ class CanvasVideo {
       this.toggleFullscreen();
     }
     this.container.onclick = e => {
-      clearTimeout(this.hover);
+      this.hover.count()
       if (this.controlBar.contains(e.target)) return;
       if (this.isDragging) return;
       let res = this.toggleVideoPlay();
