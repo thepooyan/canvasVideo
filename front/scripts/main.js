@@ -27,13 +27,14 @@ class CanvasVideo {
       this.container.classList.add('hover');
     },
     remove: () => {
-      if (!this.playButton.classList.contains('active')) return
+      if (!this.isPlaying) return
       this.container.classList.remove('hover');
     },
     timeout: null
   };
   disapearTime = 1500;
   isDragging = false;
+  isPlaying = false;
 
   constructor(id) {
     this.id = id;
@@ -267,17 +268,19 @@ class CanvasVideo {
     })
   }
   toggleVideoPlay() {
-    let isVideoPlaying = this.playButton.classList.toggle('active');
-    if (!isVideoPlaying) {
+    let result;
+    this.playButton.classList.toggle('active');
+    if (this.isPlaying) {
       this.video.pause();
       this.animationAuthorization = false;
-      return false
+      result = false;
     } else {
       this.video.play();
       this.animationAuthorization = true;
       this.#paintCanvas();
-      return true
+      result = true;
     }
+    this.isPlaying = !this.isPlaying;
   }
   finished() {
     this.toggleVideoPlay();
