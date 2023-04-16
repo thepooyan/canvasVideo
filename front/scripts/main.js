@@ -15,26 +15,26 @@ function removeDecimal(number, howMuch) {
 class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
-  hover = {
-    amount: 2000,
-    count: () => {
-      clearTimeout(this.hover.timeout);
-      this.hover.timeout = setTimeout(() => {
-        this.hover.remove();
-      }, this.hover.amount);
-    },
-    add: () => {
-      this.container.classList.add('hover');
-    },
-    remove: () => {
-      if (!this.isPlaying) return
-      this.container.classList.remove('hover');
-    },
-    timeout: null
-  };
   disapearTime = 1500;
   isDragging = false;
   isPlaying = false;
+  hover = {
+    amount: 2000,
+    timeout: null,
+    countdown: () => {
+      clearTimeout(this.hover.timeout);
+      this.hover.timeout = setTimeout(() => {
+        this.hover.hide();
+      }, this.hover.amount);
+    },
+    show: () => {
+      this.container.classList.add('hover');
+    },
+    hide: () => {
+      if (!this.isPlaying) return
+      this.container.classList.remove('hover');
+    }
+  };
 
   constructor(id) {
     this.id = id;
@@ -71,29 +71,29 @@ class CanvasVideo {
     //create container
     this.container = createEle('canvasPlayer');
     this.container.appendChild(this.canvasClone);
-    this.hover.add();
+    this.hover.show();
 
     this.container.onmousemove = () => {
-      this.hover.add();
-      this.hover.count();
+      this.hover.show();
+      this.hover.countdown();
     }
     this.container.onmouseout = () => {
-      this.hover.remove();
+      this.hover.hide();
     }
     this.container.ondblclick = e => {
       if (this.controlBar.contains(e.target)) return;
       this.toggleFullscreen();
     }
     this.container.onclick = e => {
-      this.hover.count()
+      this.hover.countdown();
       if (this.controlBar.contains(e.target)) return;
       if (this.isDragging) return;
-      let res = this.toggleVideoPlay();
-      if (res) {
-        this.hover.count();
+      this.toggleVideoPlay();
+      if (this.isPlaying) {
+        this.hover.countdown();
         this.#showNotif({ icon: this.playButton.dataset.icon })
       } else {
-        this.hover.add();
+        this.hover.show();
         this.#showNotif({ icon: this.playButton.dataset.altIcon })
       }
     }
@@ -284,7 +284,7 @@ class CanvasVideo {
   }
   finished() {
     this.toggleVideoPlay();
-    this.hover.add();
+    this.hover.show();
   }
   toggleFullscreen = () => {
     const openFullscreen = () => {
