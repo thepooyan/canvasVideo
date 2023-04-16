@@ -76,6 +76,8 @@ class CanvasVideo {
     //create container
     this.container = createEle('canvasPlayer');
     this.container.appendChild(this.canvasClone);
+    if (this.isMobile)
+      this.container.classList.add('mobile');
     this.hover.show();
 
     this.container.onmousemove = () => {
