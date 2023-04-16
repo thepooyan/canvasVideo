@@ -48,6 +48,7 @@
         padding-top: 1.7em;
         transition: .2s opacity;
         opacity: 0;
+        visibility: hidden;
 
         button {
             cursor: pointer;
@@ -291,6 +292,9 @@
         &::before,
         .controlBar {
             opacity: 100;
+        }
+        .controlBar {
+            visibility: visible;
         }
     }
 }
