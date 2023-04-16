@@ -15,8 +15,25 @@ function removeDecimal(number, howMuch) {
 class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
-  hoverTimeout;
-  disapearTime = 500;
+  hover = {
+    amount: 2000,
+    count: () => {
+      clearTimeout(this.hover.timeout);
+      this.hover.timeout = setTimeout(() => {
+        this.hover.remove();
+      }, this.hover.amount);
+    },
+    add: () => {
+      this.container.classList.add('hover');
+    },
+    remove: () => {
+      if (!this.playButton.classList.contains('active')) return
+      this.container.classList.remove('hover');
+    },
+    timeout: null
+  };
+  disapearTime = 1500;
+  isDragging = false;
 
   constructor(id) {
     this.id = id;
@@ -53,37 +70,30 @@ class CanvasVideo {
     //create container
     this.container = createEle('canvasPlayer');
     this.container.appendChild(this.canvasClone);
-    this.container.classList.add('hover');
+    this.hover.add();
 
     this.container.onmousemove = () => {
-      if (!this.playButton.classList.contains('active')) return
-      clearInterval(this.hoverTimeout);
-      this.container.classList.add('hover');
-
-      this.hoverTimeout = setTimeout(() => {
-        if (!this.playButton.classList.contains('active')) return
-        this.container.classList.remove('hover');
-      }, this.disapearTime);
+      this.hover.add();
+      this.hover.count();
     }
     this.container.onmouseout = () => {
-      if (!this.playButton.classList.contains('active')) return
-      this.container.classList.remove('hover');
+      this.hover.remove();
     }
     this.container.ondblclick = e => {
       if (this.controlBar.contains(e.target)) return;
       this.toggleFullscreen();
     }
     this.container.onclick = e => {
+      clearTimeout(this.hover);
       if (this.controlBar.contains(e.target)) return;
+      if (this.isDragging) return;
       let res = this.toggleVideoPlay();
       if (res) {
-        setTimeout(() => {
-          this.container.classList.remove('hover');
-        }, this.disapearTime);
+        this.hover.count();
         this.#showNotif({ icon: this.playButton.dataset.icon })
       } else {
+        this.hover.add();
         this.#showNotif({ icon: this.playButton.dataset.altIcon })
-        this.container.classList.add('hover')
       }
     }
 
@@ -102,11 +112,14 @@ class CanvasVideo {
       }
     }
     this.progressBar.onmousedown = e => {
-
+      this.isDragging = true;
       window.addEventListener('mousemove', dragProgressLine);
       window.addEventListener('mouseup', () => {
         window.removeEventListener('mousemove', dragProgressLine);
         this.toggleVideoPlay();
+        setTimeout(() => {
+          this.isDragging = false;
+        }, 0);
       }, { once: true })
     }
     let that = this;
@@ -268,7 +281,7 @@ class CanvasVideo {
   }
   finished() {
     this.toggleVideoPlay();
-    this.container.classList.add('hover')
+    this.hover.add();
   }
   toggleFullscreen = () => {
     const openFullscreen = () => {
