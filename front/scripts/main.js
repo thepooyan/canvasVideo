@@ -18,8 +18,8 @@ class CanvasVideo {
   disapearTime = 1500;
   isDragging = false;
   isPlaying = false;
-  // isMobile = /Android|iPhone/i.test(navigator.userAgent);
-  isMobile = true;
+  isMobile = /Android|iPhone/i.test(navigator.userAgent);
+  // isMobile = false;
   isLandscape = false;
   hover = {
     amount: 2000,
@@ -183,7 +183,7 @@ class CanvasVideo {
     this.controlBar.appendChild(this.progressBar);
 
     //create buttons
-    this.fullscButton = this.#createButton('', this.toggleFullscreen, { className: "fullsc", altIcon: '' });
+    this.fullscButton = this.#createButton('', ()=>{this.toggleFullscreen()}, { className: "fullsc", altIcon: '' });
     this.settingButton = this.#createButton('', null, { className: "setting" });
     this.volumeButton = this.#createButton('', null, { altIcon: '', className: 'volume' });
     this.#createButton('', () => {
@@ -342,6 +342,8 @@ class CanvasVideo {
     } else {
       closeFullscreen();
     }
+    if (this.isMobile)
+      this.toggleRotateScreen()
   }
   jumpVideo = ({ amount, timestamp }) => {
     if (amount)
@@ -366,7 +368,6 @@ class CanvasVideo {
     this.video.playbackRate = amount;
   }
   toggleRotateScreen() {
-    this.toggleFullscreen()
     if (screen.orientation.type.split('-')[0] === 'portrait' && !this.isLandscape) {
       screen.orientation.lock('landscape').then(res=>{
         if (res)
