@@ -165,15 +165,15 @@ class CanvasVideo {
       this.jumpVideo({ amount: -15 })
     });
     this.playButton = this.#createButton('', () => {
-      let res = this.toggleVideoPlay()
-      if (res)
+      this.toggleVideoPlay()
+      if (this.isPlaying)
         this.#showNotif({ icon: this.playButton.dataset.icon })
       else
         this.#showNotif({ icon: this.playButton.dataset.altIcon })
     }, { altIcon: '' });
 
     //volume 
-    this.volumeBar = createEle('volumeBar')
+    this.volumeBar = createEle('volumeBar');
     this.volumeBar.onclick = e => {
       let progress = (e.layerX / this.volumeBar.clientWidth) * 100;
       this.changeVolume(progress);
@@ -268,17 +268,14 @@ class CanvasVideo {
     })
   }
   toggleVideoPlay() {
-    let result;
     this.playButton.classList.toggle('active');
     if (this.isPlaying) {
       this.video.pause();
       this.animationAuthorization = false;
-      result = false;
     } else {
       this.video.play();
       this.animationAuthorization = true;
       this.#paintCanvas();
-      result = true;
     }
     this.isPlaying = !this.isPlaying;
   }
