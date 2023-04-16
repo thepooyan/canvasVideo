@@ -20,6 +20,7 @@ class CanvasVideo {
   isPlaying = false;
   // isMobile = /Android|iPhone/i.test(navigator.userAgent);
   isMobile = true;
+  isLandscape = false;
   hover = {
     amount: 2000,
     timeout: null,
@@ -108,7 +109,7 @@ class CanvasVideo {
       this.container.onclick = e => {
         this.hover.countdown();
         if (this.controlBar.contains(e.target)) return
-        
+
         if (this.hover.isShow) {
           this.hover.hide();
         } else {
@@ -349,7 +350,7 @@ class CanvasVideo {
       this.video.currentTime = timestamp;
     if (!this.isPlaying)
       this.#paintCanvas(); //refresh the picutre on the frame
-    
+
   }
   changeVolume = (amount1_100) => {
     this.video.volume = amount1_100 / 100;
@@ -364,8 +365,21 @@ class CanvasVideo {
   changeSpeed(amount) {
     this.video.playbackRate = amount;
   }
+  toggleRotateScreen() {
+    this.toggleFullscreen()
+    if (screen.orientation.type.split('-')[0] === 'portrait' && !this.isLandscape) {
+      screen.orientation.lock('landscape').then(res=>{
+        if (res)
+          this.isLandscape = true;
+      })
+    }
+    if (screen.orientation.type.split('-')[0] === 'landscape' && this.isLandscape) {
+      screen.orientation.unlock();
+      this.isLandscape = false;
+    }
+  }
 }
 
 dc.queries('canvas.video').forEach(canvas => {
-  new CanvasVideo(canvas.id);
+  window.me = new CanvasVideo(canvas.id);
 })
