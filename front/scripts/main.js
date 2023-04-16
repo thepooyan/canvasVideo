@@ -201,6 +201,9 @@ class CanvasVideo {
 
     //notif part
     this.notif = createEle('notif');
+    this.notif.addEventListener('animationend', () => {
+      this.notif.classList.remove('show');
+    })
     this.container.appendChild(this.notif);
 
     //setting menu
@@ -263,9 +266,6 @@ class CanvasVideo {
       this.notif.innerText = text;
     }
     this.notif.classList.add('show');
-    this.notif.addEventListener('animationend', () => {
-      this.notif.classList.remove('show');
-    })
   }
   toggleVideoPlay() {
     this.playButton.classList.toggle('active');
@@ -318,9 +318,9 @@ class CanvasVideo {
       this.video.currentTime += amount;
     else if (timestamp)
       this.video.currentTime = timestamp;
-    if (this.video.paused) {
+    if (!this.isPlaying)
       this.#paintCanvas(); //refresh the picutre on the frame
-    }
+    
   }
   changeVolume = (amount1_100) => {
     this.video.volume = amount1_100 / 100;
