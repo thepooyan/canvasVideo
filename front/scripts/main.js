@@ -133,20 +133,27 @@ class CanvasVideo {
         this.toggleVideoPlay()
       }
     }
-    this.progressBar.onmousedown = e => {
+    const startDrag = e => {
       this.isDragging = true;
-      window.addEventListener('mousemove', dragProgressLine);
-      window.addEventListener('mouseup', () => {
+      const ref = () => {
         window.removeEventListener('mousemove', dragProgressLine);
+        window.removeEventListener('touchmove', dragProgressLine);
         this.toggleVideoPlay();
         setTimeout(() => {
           this.isDragging = false;
         }, 0);
-      }, { once: true })
+      }
+      window.addEventListener('mousemove', dragProgressLine);
+      window.addEventListener('touchmove', dragProgressLine);
+      window.addEventListener('mouseup', ref, { once: true });
+      window.addEventListener('touchend', ref, { once: true });
     }
+    this.progressBar.onmousedown = startDrag;
+    this.progressBar.ontouchstart = startDrag;
     let that = this;
     let lineTouched;
     function dragProgressLine(e) {
+      e.preventDefault();
       clearTimeout(lineTouched);
       if (!that.video.paused) {
         that.toggleVideoPlay()
@@ -162,10 +169,11 @@ class CanvasVideo {
       }, 100);
     }
     function dragLine(event, ele) {
+      let clientX = event.clientX || event.touches[0].clientX;
       let rect = ele.getBoundingClientRect();
       let left = rect.left;
       let width = ele.clientWidth;
-      let amount = event.clientX - left;
+      let amount = clientX - left;
       if (amount < 0) amount = 0;
       if (amount > width) amount = width;
       let percent = removeDecimal(amount / width * 100, 2);
