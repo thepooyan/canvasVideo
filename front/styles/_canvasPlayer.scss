@@ -297,4 +297,13 @@
             visibility: visible;
         }
     }
+
+    @media screen and (max-width: 480px) {
+        .controlBar button.volume {
+            width: 2.5em !important;
+            .volumeBar {
+                display: none;
+            }
+        }
+    }
 }
