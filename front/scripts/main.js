@@ -1,6 +1,7 @@
 import { dc } from "eixes";
 import TimeCapsule from "./TimeCapsule";
 import $ from 'jquery';
+import ip from '/config/ip.json'
 
 function createEle(className) {
   let ele = document.createElement('div');
@@ -16,7 +17,17 @@ class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
   disapearTime = 1500;
-  isDragging = false;
+  dragState = false;
+  get isDragging() {
+    return this.dragState
+  }
+  set isDragging(ag) {
+    this.dragState = ag;
+    if (ag === true)
+    this.progressBar.classList.add('bold');
+    else
+    this.progressBar.classList.remove('bold');
+  }
   isPlaying = false;
   isMobile = /Android|iPhone/i.test(navigator.userAgent);
   // isMobile = false;
@@ -51,9 +62,9 @@ class CanvasVideo {
     this.video.style.display = "none";
     this.video.addEventListener('ended', () => { this.finished() });
     document.body.appendChild(this.video);
-
+    
     $.ajax({
-      url: 'http://192.168.1.109:3000/test',
+      url: ip.backAddress,
       method: 'POST',
       data: JSON.stringify({ hash: id }),
       contentType: 'application/json',
