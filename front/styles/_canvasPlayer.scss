@@ -376,9 +376,10 @@
         }
 
         .notif {
-            width: 70%;
+            width: 60%;
             height: 100%;
-            animation: cheshmak .35s;
+            animation: cheshmak .4s ease-out;
+            
             &.right {
                 border-radius: 50% 0 0 50%;
                 left: unset;
@@ -392,13 +393,13 @@
             }
             @keyframes cheshmak {
                 0% {
-                    background: rgb(0 0 0 / 45%);
+                    background: rgb(0 0 0 / 0%);
                 }
                 50% {
-                    background: rgb(0 0 0 / 50%);
+                    background: rgb(0 0 0 / 30%);
                 }
                 100% {
-                    background: rgb(0 0 0 / 45%);
+                    background: rgb(0 0 0 / 0%);
                 }
             }
         }
