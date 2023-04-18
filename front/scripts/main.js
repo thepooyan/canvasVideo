@@ -29,7 +29,7 @@ class CanvasVideo {
   }
   isPlaying = false;
   // isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
-  isMobile = true;
+  isMobile = false;
   isLandscape = false;
   hover = {
     amount: 2000,
@@ -87,8 +87,6 @@ class CanvasVideo {
     //create container
     this.container = createEle('canvasPlayer');
     this.container.appendChild(this.canvasClone);
-    if (this.isMobile)
-      this.container.classList.add('mobile');
     this.hover.show();
 
     this.container.onmousemove = () => {
@@ -113,29 +111,6 @@ class CanvasVideo {
       } else {
         this.hover.show();
         this.#showNotif({ icon: this.playButton.dataset.altIcon })
-      }
-    }
-    if (this.isMobile) {
-      this.container.onclick = e => {
-        this.hover.countdown();
-        if (this.controlBar.contains(e.target)) return
-
-        if (this.hover.isShow) {
-          this.hover.hide();
-        } else {
-          this.hover.show();
-        }
-      }
-      this.container.onmousemove = null;
-      this.container.onmouseout = null;
-      this.container.ondblclick = e => {
-        if (e.clientX > this.container.clientWidth / 2) {
-          this.#showNotif({ icon: "" });
-          this.jumpVideo({ amount: 10 });
-        } else {
-          this.#showNotif({ icon: "" });
-          this.jumpVideo({ amount: -10 })
-        }
       }
     }
 
@@ -276,6 +251,36 @@ class CanvasVideo {
       return li
     })
     this.settingButton.appendChild(this.settingMenu);
+
+    if (this.isMobile) {
+      this.container.classList.add('mobile');
+      this.container.onclick = e => {
+        this.hover.countdown();
+        if (this.controlBar.contains(e.target)) return
+
+        if (this.hover.isShow) {
+          this.hover.hide();
+        } else {
+          this.hover.show();
+        }
+      }
+      this.container.onmousemove = null;
+      this.container.onmouseout = null;
+      this.container.ondblclick = e => {
+        if (e.clientX > this.container.clientWidth / 2) {
+          this.#showNotif({ icon: "" });
+          this.jumpVideo({ amount: 10 });
+        } else {
+          this.#showNotif({ icon: "" });
+          this.jumpVideo({ amount: -10 });
+        }
+      }
+      this.altPlay = createEle('play');
+      this.altPlay.dataset.icon = '';
+      this.altPlay.dataset.altIcon = '';
+      this.altPlay.onclick = () => {this.toggleVideoPlay(); this.altPlay.classList.toggle('active')};
+      this.container.appendChild(this.altPlay);
+    }
 
     this.canvas.replaceWith(this.container);
   }

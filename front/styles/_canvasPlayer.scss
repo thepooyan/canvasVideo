@@ -348,5 +348,31 @@
                 }
             }
         }
+        
+        .play {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            color: white;
+            background: #4b4b4b6e;
+            border-radius: 50%;
+            --wid: 4.6em;
+            width: var(--wid);
+            height: var(--wid);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4em;
+            opacity: 0;
+            transition: .2s opacity;
+        }
+
+        &.hover .play {
+            opacity: 100;
+        }
+
     }
 }
