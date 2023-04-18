@@ -194,7 +194,7 @@ class CanvasVideo {
 
     //create buttons
     this.fullscButton = this.#createButton('', ()=>{this.toggleFullscreen()}, { className: "fullsc", altIcon: '' });
-    this.settingButton = this.#createButton('', null, { className: "setting" });
+    this.settingButton = this.#createButton('', ()=>{this.settingButton.classList.toggle('open')}, { className: "setting" });
     this.volumeButton = this.#createButton('', null, { altIcon: '', className: 'volume' });
     this.#createButton('', () => {
       this.#showNotif({ icon: "" });

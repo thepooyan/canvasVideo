@@ -128,7 +128,7 @@
                     display: inline-block;
                 }
 
-                &:hover {
+                &.open {
 
                     &::before {
                         transform: rotate(45deg);
