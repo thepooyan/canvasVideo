@@ -28,8 +28,8 @@ class CanvasVideo {
     this.progressBar.classList.remove('bold');
   }
   isPlaying = false;
-  isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
-  // isMobile = false;
+  // isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
+  isMobile = true;
   isLandscape = false;
   hover = {
     amount: 2000,
@@ -234,7 +234,7 @@ class CanvasVideo {
     }
     function volumeDrag(e) {
       let progress = dragLine(e, that.volumeBar);
-      if (progress) {
+      if (progress || progress === 0) {
         that.changeVolume(progress)
         that.volumeBar.style.setProperty('--progress', progress);
       }

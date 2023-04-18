@@ -1,1 +1,2 @@
 - line drag on above the control bar cause the video to pause
+- time should change while dragging the line
