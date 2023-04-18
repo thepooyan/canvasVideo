@@ -172,6 +172,8 @@ class CanvasVideo {
       let progress = dragLine(e, that.progressBar)
       let lastProgress;
       that.progressBar.style.setProperty('--progress', progress);
+      let spentTimeString = TimeCapsule.clockify((progress * that.wholeTime.time) / 100);
+      that.controlBar.dataset.spenttime = spentTimeString;
 
       lineTouched = setTimeout(() => {
         if (progress === lastProgress) return

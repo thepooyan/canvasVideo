@@ -2,6 +2,9 @@ export default class TimeCapsule {
     constructor(seconds) {
         this.time = Math.round(seconds);
     }
+    static clockify(seconds) {
+        return new TimeCapsule(seconds).getByMinute()
+    }
     set(time) {
         this.time = time;
     }
