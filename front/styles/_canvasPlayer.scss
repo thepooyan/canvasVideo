@@ -375,5 +375,33 @@
             opacity: 100;
         }
 
+        .notif {
+            width: 70%;
+            height: 100%;
+            animation: cheshmak .35s;
+            &.right {
+                border-radius: 50% 0 0 50%;
+                left: unset;
+            }
+            &.left {
+                border-radius: 0 50% 50% 0;
+                right: unset;
+            }
+            &::before {
+                content: unset;
+            }
+            @keyframes cheshmak {
+                0% {
+                    background: rgb(0 0 0 / 45%);
+                }
+                50% {
+                    background: rgb(0 0 0 / 50%);
+                }
+                100% {
+                    background: rgb(0 0 0 / 45%);
+                }
+            }
+        }
+
     }
 }

@@ -29,7 +29,7 @@ class CanvasVideo {
   }
   isPlaying = false;
   // isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
-  isMobile = false;
+  isMobile = true;
   isLandscape = false;
   hover = {
     amount: 2000,
@@ -229,7 +229,7 @@ class CanvasVideo {
     //notif part
     this.notif = createEle('notif');
     this.notif.addEventListener('animationend', () => {
-      this.notif.classList.remove('show');
+      this.notif.className = 'notif';
     })
     this.container.appendChild(this.notif);
 
@@ -268,13 +268,14 @@ class CanvasVideo {
       this.container.onmouseout = null;
       this.container.ondblclick = e => {
         if (e.clientX > this.container.clientWidth / 2) {
-          this.#showNotif({ icon: "" });
+          this.heighlight(true);
           this.jumpVideo({ amount: 10 });
         } else {
-          this.#showNotif({ icon: "" });
+          this.heighlight(false);
           this.jumpVideo({ amount: -10 });
         }
       }
+      //alt play icon
       this.altPlay = createEle('play');
       this.altPlay.dataset.icon = '';
       this.altPlay.dataset.altIcon = '';
@@ -323,6 +324,14 @@ class CanvasVideo {
       this.notif.innerText = text;
     }
     this.notif.classList.add('show');
+  }
+  heighlight(right) {
+    if (right) {
+      this.notif.classList.add('right');
+    } else {
+      this.notif.classList.add('left');
+    }
+      this.notif.classList.add('show');
   }
   toggleVideoPlay() {
     this.playButton.classList.toggle('active');
