@@ -367,10 +367,12 @@
             align-items: center;
             font-size: 1.4em;
             opacity: 0;
+            visibility: hidden;
             transition: .2s opacity;
         }
 
         &.hover .play {
+            visibility: visible;
             opacity: 100;
         }
 
