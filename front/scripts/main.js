@@ -225,10 +225,11 @@ class CanvasVideo {
       this.toggleMute();
     }
     this.volumeBar.onmousedown = e => {
-
+      this.volumeButton.classList.add('dragging');
       window.addEventListener('mousemove', volumeDrag);
       window.addEventListener('mouseup', () => {
         window.removeEventListener('mousemove', volumeDrag);
+        this.volumeButton.classList.remove('dragging');
       })
     }
     function volumeDrag(e) {
