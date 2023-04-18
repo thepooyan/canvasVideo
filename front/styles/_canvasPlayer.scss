@@ -95,18 +95,21 @@
                         position: absolute;
                         left: calc(calc(1% * var(--progress)) - 1px);
                     }
+
                     &::after {
                         content: '';
                         height: 2px;
                         width: 100%;
                         background: linear-gradient(to right, var(--color2) calc(1% * var(--progress)), var(--color1) calc(1% * var(--progress)));
                     }
+
                     &.muted {
                         --progress: 0 !important;
                     }
                 }
 
-                &:hover, &.dragging {
+                &:hover,
+                &.dragging {
                     width: 10em;
                 }
 
@@ -144,7 +147,7 @@
                 >div {
                     visibility: hidden;
                     position: absolute;
-                    bottom:  calc(100% - 0.7em);
+                    bottom: calc(100% - 0.7em);
                     background: white;
                     color: black;
                     transition: .2s;
@@ -159,7 +162,8 @@
                         padding: 0.2em 1.9em;
                         font-size: 1.2em;
 
-                        &:hover, &.active {
+                        &:hover,
+                        &.active {
                             background-color: rgb(201, 201, 201);
                         }
                     }
@@ -296,6 +300,7 @@
         .controlBar {
             opacity: 100;
         }
+
         .controlBar {
             visibility: visible;
         }
@@ -305,9 +310,43 @@
         .controlBar button.volume {
             display: none;
         }
+
         .controlBar .progressBar {
             // left: 0;
             // width: 100%;
+        }
+
+        .controlBar button.setting {
+            &::after {
+                content: "";
+                background-color: #0000006e;
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                visibility: hidden;
+            }
+
+            >div {
+                position: fixed;
+                bottom: -4em;
+                left: 0;
+                z-index: 10;
+                width: 100%;
+                font-size: 1.2em;
+                transition: .2s bottom, .2s visibility;
+
+            }
+
+            &.open {
+                &::after {
+                    visibility: visible;
+                }
+                >div {
+                    bottom: 0;
+                }
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ class CanvasVideo {
   }
   isPlaying = false;
   // isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
-  isMobile = true;
+  isMobile = false;
   isLandscape = false;
   hover = {
     amount: 2000,
