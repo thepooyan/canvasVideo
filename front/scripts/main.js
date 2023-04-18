@@ -16,9 +16,19 @@ class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
   disapearTime = 1500;
-  isDragging = false;
+  dragState = false;
+  get isDragging() {
+    return this.dragState
+  }
+  set isDragging(bool) {
+    this.dragState = bool;
+    if (bool)
+    this.progressBar.classList.add('bold');
+    else
+    this.progressBar.classList.remove('bold');
+  }
   isPlaying = false;
-  isMobile = /Android|iPhone/i.test(navigator.userAgent);
+  isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
   // isMobile = false;
   isLandscape = false;
   hover = {
