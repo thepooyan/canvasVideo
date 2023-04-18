@@ -29,7 +29,7 @@ class CanvasVideo {
   }
   isPlaying = false;
   // isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
-  isMobile = false;
+  isMobile = true;
   isLandscape = false;
   hover = {
     amount: 2000,
@@ -128,6 +128,15 @@ class CanvasVideo {
       }
       this.container.onmousemove = null;
       this.container.onmouseout = null;
+      this.container.ondblclick = e => {
+        if (e.clientX > this.container.clientWidth / 2) {
+          this.#showNotif({ icon: "" });
+          this.jumpVideo({ amount: 10 });
+        } else {
+          this.#showNotif({ icon: "" });
+          this.jumpVideo({ amount: -10 })
+        }
+      }
     }
 
     //create control bar
