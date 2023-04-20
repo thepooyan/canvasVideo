@@ -1,2 +1,3 @@
 - mobile double click is not so good
 - make speed change menu better (both pc and mobile)
+- double click on mobile should not bring out the panel
