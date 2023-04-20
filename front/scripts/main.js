@@ -1,6 +1,7 @@
 import { dc } from "eixes";
 import TimeCapsule from "./TimeCapsule";
 import $ from 'jquery';
+import ip from '/config/ip.json'
 
 function createEle(className) {
   let ele = document.createElement('div');
@@ -28,8 +29,8 @@ class CanvasVideo {
     this.progressBar.classList.remove('bold');
   }
   isPlaying = false;
-  // isMobile = /sAndroid|iPhone/i.test(navigator.userAgent);
-  isMobile = true;
+  isMobile = /Android|iPhone/i.test(navigator.userAgent);
+  // isMobile = true;
   isLandscape = false;
   hover = {
     amount: 2000,
@@ -56,14 +57,14 @@ class CanvasVideo {
     this.id = id;
     this.canvas = dc.id(id);
     this.canvasClone = this.canvas.cloneNode();
-
+    
     this.video = document.createElement('video');
     this.video.style.display = "none";
     this.video.addEventListener('ended', () => { this.finished() });
     document.body.appendChild(this.video);
-
+    
     $.ajax({
-      url: 'http://192.168.1.109:3000/test',
+      url: ip.backAddress,
       method: 'POST',
       data: JSON.stringify({ hash: id }),
       contentType: 'application/json',
