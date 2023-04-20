@@ -280,7 +280,7 @@ class CanvasVideo {
       this.altPlay = createEle('play');
       this.altPlay.dataset.icon = '';
       this.altPlay.dataset.altIcon = '';
-      this.altPlay.onclick = () => {this.toggleVideoPlay(); this.altPlay.classList.toggle('active')};
+      this.altPlay.onclick = () => {this.toggleVideoPlay()};
       this.container.appendChild(this.altPlay);
     }
 
@@ -336,6 +336,7 @@ class CanvasVideo {
   }
   toggleVideoPlay() {
     this.playButton.classList.toggle('active');
+    this.altPlay?.classList.toggle('active');
     if (this.isPlaying) {
       this.video.pause();
       this.animationAuthorization = false;

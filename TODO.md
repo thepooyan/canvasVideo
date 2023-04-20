@@ -1,4 +1,3 @@
 - line drag on above the control bar cause the video to pause
-- two play icons could run out of sync
 - mobile double click is not so good
 - make speed change menu better (both pc and mobile)
