@@ -13,6 +13,18 @@ function removeDecimal(number, howMuch) {
   return Math.trunc(number * Math.pow(10, howMuch)) / Math.pow(10, howMuch);
 }
 
+function preventIfDoubleClick(func) {
+  let clickClousure;
+
+  return e => {
+    clearTimeout(clickClousure);
+    clickClousure = setTimeout(() => {
+      if (e.detail !== 1) return
+      func(e);
+    }, 200);
+  }
+}
+
 class CanvasVideo {
   animationAuthorization = true;
   spentTime = new TimeCapsule(0);
@@ -24,9 +36,9 @@ class CanvasVideo {
   set isDragging(bool) {
     this.dragState = bool;
     if (bool)
-    this.progressBar.classList.add('bold');
+      this.progressBar.classList.add('bold');
     else
-    this.progressBar.classList.remove('bold');
+      this.progressBar.classList.remove('bold');
   }
   isPlaying = false;
   // isMobile = /Android|iPhone/i.test(navigator.userAgent);
@@ -57,12 +69,12 @@ class CanvasVideo {
     this.id = id;
     this.canvas = dc.id(id);
     this.canvasClone = this.canvas.cloneNode();
-    
+
     this.video = document.createElement('video');
     this.video.style.display = "none";
     this.video.addEventListener('ended', () => { this.finished() });
     document.body.appendChild(this.video);
-    
+
     $.ajax({
       url: ip.backAddress,
       method: 'POST',
@@ -180,8 +192,8 @@ class CanvasVideo {
     this.controlBar.appendChild(this.progressBar);
 
     //create buttons
-    this.fullscButton = this.#createButton('', ()=>{this.toggleFullscreen()}, { className: "fullsc", altIcon: '' });
-    this.settingButton = this.#createButton('', ()=>{this.settingButton.classList.toggle('open')}, { className: "setting" });
+    this.fullscButton = this.#createButton('', () => { this.toggleFullscreen() }, { className: "fullsc", altIcon: '' });
+    this.settingButton = this.#createButton('', () => { this.settingButton.classList.toggle('open') }, { className: "setting" });
     this.volumeButton = this.#createButton('', null, { altIcon: '', className: 'volume' });
     this.#createButton('', () => {
       this.#showNotif({ icon: "" });
@@ -255,7 +267,7 @@ class CanvasVideo {
 
     if (this.isMobile) {
       this.container.classList.add('mobile');
-      this.container.onclick = e => {
+      this.container.onclick = preventIfDoubleClick(e => {
         this.hover.countdown();
         if (this.controlBar.contains(e.target)) return
 
@@ -264,7 +276,7 @@ class CanvasVideo {
         } else {
           this.hover.show();
         }
-      }
+      })
       this.container.onmousemove = null;
       this.container.onmouseout = null;
       this.container.ondblclick = e => {
@@ -280,7 +292,7 @@ class CanvasVideo {
       this.altPlay = createEle('play');
       this.altPlay.dataset.icon = '';
       this.altPlay.dataset.altIcon = '';
-      this.altPlay.onclick = () => {this.toggleVideoPlay()};
+      this.altPlay.onclick = () => { this.toggleVideoPlay() };
       this.container.appendChild(this.altPlay);
     }
 
@@ -409,7 +421,7 @@ class CanvasVideo {
   }
   toggleRotateScreen() {
     if (screen.orientation.type.split('-')[0] === 'portrait' && !this.isLandscape) {
-      screen.orientation.lock('landscape').then(res=>{
+      screen.orientation.lock('landscape').then(res => {
         if (res)
           this.isLandscape = true;
       })
