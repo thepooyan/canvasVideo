@@ -2,4 +2,3 @@
 - two play icons could run out of sync
 - mobile double click is not so good
 - make speed change menu better (both pc and mobile)
-- mobile nav bar overflow fix
