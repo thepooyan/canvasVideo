@@ -4,7 +4,7 @@
     --background: black;
     display: block;
     position: relative;
-    
+
     width: max-content;
     max-width: 100%;
     margin-bottom: 1em;
@@ -335,7 +335,7 @@
                     padding: 1em;
                     filter: drop-shadow(0px 0px 2px #00000075);
 
-                    > div {
+                    >div {
                         bottom: unset;
                         top: 100%;
                     }
@@ -422,20 +422,28 @@
             width: 60%;
             height: 100%;
             animation: cheshmak .4s ease-out;
+            display: none;
 
             &.right {
                 border-radius: 50% 0 0 50%;
                 left: unset;
+                display: flex;
+
+                &::before {
+                    content: '10 ثانیه به جلو';
+                }
             }
 
             &.left {
                 border-radius: 0 50% 50% 0;
                 right: unset;
+                display: flex;
+
+                &::before {
+                    content: '10 ثانیه به عقب';
+                }
             }
 
-            &::before {
-                content: unset;
-            }
 
             @keyframes cheshmak {
                 0% {

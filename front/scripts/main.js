@@ -332,7 +332,9 @@ class CanvasVideo {
     } else {
       this.notif.classList.add('left');
     }
-      this.notif.classList.add('show');
+    this.notif.classList.add('show');
+    this.notif.innerText = '';
+    this.notif.removeAttribute('data-icon')
   }
   toggleVideoPlay() {
     this.playButton.classList.toggle('active');
