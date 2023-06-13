@@ -41,8 +41,8 @@ class CanvasVideo {
       this.progressBar.classList.remove('bold');
   }
   isPlaying = false;
-  // isMobile = /Android|iPhone/i.test(navigator.userAgent);
-  isMobile = true;
+  isMobile = /Android|iPhone/i.test(navigator.userAgent);
+  // isMobile = true;
   isLandscape = false;
   hover = {
     amount: 2000,
